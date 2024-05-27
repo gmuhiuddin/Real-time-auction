@@ -1,0 +1,95 @@
+.web-name{
+    color: #01d293;
+}
+.navbar-container {
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    padding: 0px 2em;
+    font-size: 16px;
+    background-color: #0E1930;
+}
+
+.login-txt {
+    margin-right: 15px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.3em;
+    color: white;
+}
+
+.login-txt:hover {
+    color: #aaaefe;
+}
+
+.rounded {
+    border-radius: 0px;
+    background-color: #0E1930;
+}
+
+.bgcbk{
+    color: white;
+}
+
+.signout-btn-back:hover{
+    color: black;
+background-color: #25415d;
+}
+
+.text-gray-500 {
+    --tw-text-opacity: 1;
+    color: white;
+}
+
+.text-gray-500:hover {
+    --tw-text-opacity: 1;
+    color: rgb(0, 0, 0);
+}
+
+.opt {
+    cursor: pointer;
+    color: white;
+    font-size: 1.2em;
+}
+
+.co-name {
+    color: white;
+    font-size: 1.5em;
+}
+
+.disabled-opt{
+    cursor: not-allowed !important;
+}
+
+@media screen and (max-width: 765px) {
+    .login-txt {
+        line-height: 40px;
+    }
+    .navbar-container {
+        font-size: 13.5px;
+    }
+}
+
+@media screen and (max-width: 355px) {
+    .navbar-container {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 325px) {
+    .navbar-container {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 301px) {
+    .navbar-container {
+        font-size: 9.5px;
+    }
+}
+
+@media screen and (max-width: 271px) {
+    .navbar-container {
+        font-size: 8px;
+    }
+}

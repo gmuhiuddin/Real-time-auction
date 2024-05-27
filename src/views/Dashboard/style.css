@@ -1,0 +1,8 @@
+.dashboard-main-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    background-color: red;
+    width: 100%;
+}

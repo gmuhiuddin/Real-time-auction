@@ -1,0 +1,61 @@
+.pass-reset-page-main-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0E1930;
+    height: 100vh;
+    width: 100%;
+}
+
+.pass-reset-page-main-container > span{
+    border-radius: 50%;
+    height: 49px;
+    width: 49px;
+    position: fixed;
+    top: 1%;
+    left: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: #01d293;
+    cursor: pointer;
+}
+
+.pass-container{
+    height: 15em;
+    width: 25em;
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.pass-container>form>h1{
+    color: black;
+    font-size: 1.7em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.pass-container>form>input{
+    border-radius: 12px;
+    width: 85%;
+    margin: 0 auto;
+    display: block;
+}
+
+.pass-container>form>button{
+    border-radius: 12px;
+    width: 75%;
+    padding: 11px 0px;
+    margin: 0 auto;
+    display: block;
+    background-color: #01d293;
+}
+
+
+.pass-container>form>button:disabled{
+    cursor: not-allowed;
+    background-color: #13ffb8;
+
+}

@@ -11,7 +11,7 @@
 
 .product-card {
     background-color: #01d293;
-    height: 23em;
+    height: 25em;
     width: 19em;
     margin: 9px;
     border-radius: 12px;
@@ -19,7 +19,7 @@
 
 .product-card img {
     width: 100%;
-    height: 61%;
+    height: 55%;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
@@ -32,14 +32,33 @@
 }
 
 .product-card h3 {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1.3em;
     padding-left: 9px;
     overflow-wrap: break-word;
 }
 
+.product-card span {
+    font-weight: 400;
+    font-size: 1em;
+    padding: 0px 9px;
+    display: inline-block;
+    width: 100%;
+    overflow-wrap: break-word;
+}
 
-@media screen and (width <= 219px) {
+.product-card button {
+    background-color: #171f38;
+    width: 75%;
+    margin: auto;
+    display: block;
+    padding: 9px;
+    border-radius: 12px;
+    color: white;
+    margin-top: 9px;
+}
+
+@media screen and (width <=219px) {
     .dashboard-main-container {
         padding-top: 93px;
         font-size: 75%;

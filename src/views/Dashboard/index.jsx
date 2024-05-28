@@ -3,20 +3,17 @@ import { useSelector } from 'react-redux';
 import { getProductsFromDb } from '../../config/firebase';
 import Loader from '../Loader';
 import './style.css';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
 
   const [products, setProducts] = useState();
-  const authInfo = useSelector(res => res.userInfo.auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getProducts();
+    getProductsFromDb(setProducts);
   }, []);
-
-  const getProducts = async () => {
-    await getProductsFromDb(setProducts);
-  };
-
+  
   return (
     <div className='dashboard-main-container'>
     {!products ?
@@ -27,7 +24,9 @@ function Dashboard() {
           <div className='product-card'>
             <img src="https://media.licdn.com/dms/image/D4D03AQF7_cbK0JjaPA/profile-displayphoto-shrink_800_800/0/1707840065200?e=2147483647&v=beta&t=jrdRdeKilxOBVcRHCldEN6j1v1sOYO64M19UYWGSJ9I" alt="Product-image" />
             <h2>{element.title}</h2>
-            <h3>{element.price}</h3>
+            <h3>${element.price}</h3>
+            <span>{element.description.substring(0, 73)}{element.description.length >= 73 && "..."}</span>
+            <button onClick={() => navigate(`/detail/${element.id}`)}>Place a bid</button>
           </div>
         )
       })

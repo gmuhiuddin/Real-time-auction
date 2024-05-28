@@ -1,15 +1,15 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { collection, doc, getDoc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBMFEBXhwuNu3yhswTfoPqkSz_bKeylZq0",
-  authDomain: "real-time-aution.firebaseapp.com",
-  projectId: "real-time-aution",
-  storageBucket: "real-time-aution.appspot.com",
-  messagingSenderId: "773219752625",
-  appId: "1:773219752625:web:a463ba7a29dfc606daa090",
-  measurementId: "G-780MSKWHHC"
+    apiKey: "AIzaSyBMFEBXhwuNu3yhswTfoPqkSz_bKeylZq0",
+    authDomain: "real-time-aution.firebaseapp.com",
+    projectId: "real-time-aution",
+    storageBucket: "real-time-aution.appspot.com",
+    messagingSenderId: "773219752625",
+    appId: "1:773219752625:web:a463ba7a29dfc606daa090",
+    measurementId: "G-780MSKWHHC"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -59,4 +59,51 @@ const getProductsFromDb = async (setProducts) => {
     });
 };
 
-export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, auth };
+const getProductFromDb = async (productId, setProduct) => {
+    const productsCollection = doc(db, "products", productId);
+
+    onSnapshot(productsCollection, doc => {
+        setProduct({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+};
+
+const placeABid = async (bidAmount, productId) => {
+    const productDoc = doc(db, "products", productId);
+    const bidCollection = collection(db, "bids");
+
+    await updateDoc(productDoc, {
+        price: bidAmount
+    });
+
+    await addDoc(bidCollection, {
+        bidAmount, productId
+
+    });
+};
+
+const getBids = async (productId, setBids) => {
+    const BidCollection = collection(db, "bids");
+
+    const q = query(
+        BidCollection,
+        orderBy("bidAmount", "desc"),
+        where("productId", "==", productId)
+    );
+    
+    onSnapshot(q, doc => {
+
+        const bids = doc.docs.map(element => {
+            return {
+                id: element.id,
+                ...element.data()
+            }
+        });
+
+        setBids(bids);
+    });
+};
+
+export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, auth };

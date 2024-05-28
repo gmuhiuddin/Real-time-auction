@@ -8,6 +8,7 @@ import Login from '../views/Login';
 import PassResetPage from '../views/PassResetPage';
 import Loader from '../views/Loader';
 import Navbar from '../components/Navbar';
+import PlaceBidPage from '../views/PlaceBidPage';
 import { setUser, removeUser } from '../store/userSlice.jsx';
 
 const router = createBrowserRouter([
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
                     {
                         path: "/",
                         element: <Dashboard />
-                    }
+                    },
+                    {
+                        path: "/detail/:productid",
+                        element: <PlaceBidPage />
+                    },
                 ]
             },
             {

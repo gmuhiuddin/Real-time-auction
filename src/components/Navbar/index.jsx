@@ -19,8 +19,8 @@ import { removeUser } from '../../store/userSlice.jsx';
 
 function NavbarComponent() {
 
-    const navigate = useNavigate();
     const user = useSelector(res => res.userInfo.auth);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     
     const { username: userName, email: userEmail, userImg } = user;
@@ -32,6 +32,7 @@ function NavbarComponent() {
 
     const handleScrollHomePage = () => {
         window.scrollTo(0, 0);
+        navigate('/')
     };
 
     return (

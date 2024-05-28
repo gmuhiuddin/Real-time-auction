@@ -17,8 +17,8 @@ const [visible, setVisible] = useState(true);
 
   return (
     <div style={{ 
-      backgroundColor: isErrMsg ? '#fff' : "#01d293",
-      color: '#0E1930',
+      backgroundColor: isErrMsg ? 'red' : "#01d293",
+      color: isErrMsg ? 'white' : '#0E1930',
       padding: '10px',
       borderRadius: '5px',
       position: 'fixed',

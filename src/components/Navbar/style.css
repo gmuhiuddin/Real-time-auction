@@ -1,6 +1,7 @@
 .web-name{
     color: #01d293;
 }
+
 .navbar-container {
     width: 100vw;
     position: fixed;
@@ -90,6 +91,6 @@ background-color: #25415d;
 
 @media screen and (max-width: 271px) {
     .navbar-container {
-        font-size: 8px;
+        font-size: 9px;
     }
 }

@@ -20,7 +20,7 @@ import { removeUser } from '../../store/userSlice.jsx';
 function NavbarComponent() {
 
     const navigate = useNavigate();
-    const user = useSelector(res => res.userInfo.user);
+    const user = useSelector(res => res.userInfo.auth);
     const dispatch = useDispatch();
     
     const { username: userName, email: userEmail, userImg } = user;
@@ -30,12 +30,6 @@ function NavbarComponent() {
         dispatch(removeUser());
     };
 
-    // const handleScrollContactPage = () => {
-    //     const halfwayPoint = document.documentElement.scrollHeight;
-
-    //     window.scrollTo(0, halfwayPoint);
-    // };
-
     const handleScrollHomePage = () => {
         window.scrollTo(0, 0);
     };
@@ -44,7 +38,7 @@ function NavbarComponent() {
             <div className='navbar-container'>
                 <Navbar fluid rounded>
                     <NavbarBrand href="/">
-                        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white co-name"><span className='web-name'>C</span>ar <span className='web-name'>P</span>arking</span>
+                        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white co-name"><span className='web-name'>A</span>uction <span className='web-name'>W</span>eb</span>
                     </NavbarBrand>
                     <div className="flex md:order-2">
                         {userEmail ?

@@ -2,3 +2,16 @@
   margin: 0px;
   padding: 0px;
 }
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 9px;
+  background-color: #0E1930;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #01d293;
+  /* Color of the thumb */
+  border-radius: 10px;
+  /* Rounded corners of the thumb */
+}

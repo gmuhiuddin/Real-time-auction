@@ -8,8 +8,8 @@ function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
   const loginBtnRef = useRef(null);
   const signupBtnRef = useRef(null);
-  const [ errMessage, setErrMessage ] = useState('');
-  const [ successMessage, setSuccessMessage ] = useState('');
+  const [errMessage, setErrMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -115,8 +115,8 @@ function LoginForm() {
           </div>
         </div>
       </div>
-      {errMessage && <CustomAlert txt={errMessage} isErrMsg={true}/>}
-      {successMessage && <CustomAlert txt={successMessage} isErrMsg={false}/>}
+      {errMessage && <CustomAlert txt={errMessage} isErrMsg={true} />}
+      {successMessage && <CustomAlert txt={successMessage} isErrMsg={false} />}
     </div>
   );
 };

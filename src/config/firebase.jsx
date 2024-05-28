@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { collection, getFirestore, onSnapshot } from "firebase/firestore";
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { collection, doc, getDoc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBMFEBXhwuNu3yhswTfoPqkSz_bKeylZq0",
@@ -12,6 +13,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 const signup = async (username, email, password) => {
@@ -57,4 +59,4 @@ const getProductsFromDb = async (setProducts) => {
     });
 };
 
-export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup };
+export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, auth };

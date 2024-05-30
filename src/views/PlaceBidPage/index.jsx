@@ -6,6 +6,7 @@ import Loader from "../Loader";
 import ImageSlider from '../../components/ImageSlider';
 import CutomAlert from '../../components/CutomAlert';
 import './style.css';
+import { useSelector } from 'react-redux';
 
 function PlaceBidPage() {
 
@@ -14,6 +15,7 @@ function PlaceBidPage() {
     const [bids, setBids] = useState();
     const [errMsg, setErrMsg] = useState();
     const [successMsg, setSuccessMsg] = useState();
+    const authInfo = useSelector(res => res.userInfo.auth);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,14 +24,14 @@ function PlaceBidPage() {
     }, []);
     
     const images = [""];
-
+    
     const handlePlaceBid = async (e) => {
         e.preventDefault();
         setSuccessMsg();
         setErrMsg();
 
         try{
-            await placeABid(e.target[0].value, productId);
+            await placeABid(e.target[0].value, productId, authInfo.uid);
 
             setSuccessMsg("Bid placed successfully");
             e.target[0].value = "";
@@ -55,7 +57,7 @@ function PlaceBidPage() {
                     <div className="place-bid-container">
                         <form onSubmit={handlePlaceBid}>
                             <input type='number' placeholder='Please enter bid amount' required min={product.price} />
-                            <button type='submit'>Place bid</button>
+                            <button disabled={authInfo.uid ? authInfo.uid == bids[-1].uid : true} type='submit'>Place bid</button>
                         </form>
                         <div>
                             {bids ?

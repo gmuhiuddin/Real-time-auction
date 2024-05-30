@@ -70,17 +70,16 @@ const getProductFromDb = async (productId, setProduct) => {
     });
 };
 
-const placeABid = async (bidAmount, productId) => {
+const placeABid = async (bidAmount, productId, uid) => {
     const productDoc = doc(db, "products", productId);
     const bidCollection = collection(db, "bids");
 
-    await updateDoc(productDoc, {
-        price: bidAmount
+    await addDoc(bidCollection, {
+        bidAmount, productId, uid
     });
 
-    await addDoc(bidCollection, {
-        bidAmount, productId
-
+    await updateDoc(productDoc, {
+        price: bidAmount
     });
 };
 
@@ -89,7 +88,7 @@ const getBids = async (productId, setBids) => {
 
     const q = query(
         BidCollection,
-        orderBy("bidAmount", "desc"),
+        orderBy("bidAmount", "asc"),
         where("productId", "==", productId)
     );
     
@@ -97,7 +96,6 @@ const getBids = async (productId, setBids) => {
 
         const bids = doc.docs.map(element => {
             return {
-                id: element.id,
                 ...element.data()
             }
         });

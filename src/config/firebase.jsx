@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -22,12 +22,12 @@ const signup = async (username, email, password) => {
     const userDataCollection = doc(db, "users", uid);
 
     await setDoc(userDataCollection, {
-        username, email, userImg: ""
+        username, email, userImg: "", verified: false
     });
 };
 
 const login = async (email, password) => {
-    const user = await signInWithEmailAndPassword(auth, email, password);
+    await signInWithEmailAndPassword(auth, email, password);
 };
 
 const logout = async () => {
@@ -89,7 +89,7 @@ const getBids = async (productId, setBids) => {
 
     const q = query(
         BidCollection,
-        orderBy("bidAmount", "asc"),
+        orderBy("time", "desc"),
         where("productId", "==", productId)
     );
 
@@ -110,4 +110,8 @@ const getBids = async (productId, setBids) => {
     });
 };
 
-export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, auth };
+const sendVerificationEmail = async () => {
+    await sendEmailVerification(auth.currentUser);
+};
+
+export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, auth };

@@ -32,7 +32,7 @@ function PlaceBidPage() {
         setErrMsg();
 
         try {
-            await placeABid(e.target[0].value, productId, authInfo.uid);
+            await placeABid(e.target[0].value, productId, authInfo?.uid);
 
             setSuccessMsg("Bid placed successfully");
             e.target[0].value = "";
@@ -58,7 +58,7 @@ function PlaceBidPage() {
                     <div className="place-bid-container">
                         <form onSubmit={handlePlaceBid}>
                             <input type='number' placeholder='Please enter bid amount' required min={product.price} />
-                            <button disabled={authInfo.uid && bids ? authInfo.uid == bids[bids.length - 1]?.uid : true} type='submit'>Bid</button>
+                            <button disabled={authInfo?.uid ? bids && authInfo?.uid == bids[bids.length - 1]?.uid : true} type='submit'>Bid</button>
                         </form>
                         <div>
                             {bids ?

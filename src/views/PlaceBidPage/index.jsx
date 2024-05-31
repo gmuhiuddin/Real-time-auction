@@ -40,7 +40,7 @@ function PlaceBidPage() {
             e.target[0].value = "";
         };
     };
-
+// console.log(bids[-1]);
     return (
         <div className='detail-page-main-container'>
             <span onClick={() => navigate('/')} className='back-btn'><BsArrowLeft size={31} /></span>
@@ -57,7 +57,7 @@ function PlaceBidPage() {
                     <div className="place-bid-container">
                         <form onSubmit={handlePlaceBid}>
                             <input type='number' placeholder='Please enter bid amount' required min={product.price} />
-                            <button disabled={authInfo.uid ? authInfo.uid == bids[-1].uid : true} type='submit'>Place bid</button>
+                            <button type='submit'>Place bid</button>
                         </form>
                         <div>
                             {bids ?

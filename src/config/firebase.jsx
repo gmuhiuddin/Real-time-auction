@@ -92,15 +92,24 @@ const getBids = async (productId, setBids) => {
         where("productId", "==", productId)
     );
     
-    onSnapshot(q, doc => {
+    onSnapshot(q, async doc => {
 
-        const bids = doc.docs.map(element => {
-            return {
+        const arr = [];
+
+        const bids = doc.docs.forEach(async element => {
+
+            const userInfoDoc = doc(db, "users", element.data().uid);
+            const userInfo = await getDoc(userInfoDoc);
+
+            arr.push({
+                uid: userInfo.id,
+                ...userInfo.data(),
                 ...element.data()
-            }
-        });
+            });
 
-        setBids(bids);
+        });
+console.log(arr);
+        // setBids(bids);
     });
 };
 

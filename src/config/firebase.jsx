@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBMFEBXhwuNu3yhswTfoPqkSz_bKeylZq0",
@@ -75,7 +75,8 @@ const placeABid = async (bidAmount, productId, uid) => {
     const bidCollection = collection(db, "bids");
 
     await addDoc(bidCollection, {
-        bidAmount, productId, uid
+        bidAmount, productId, uid,
+        time: serverTimestamp()
     });
 
     await updateDoc(productDoc, {
@@ -91,25 +92,21 @@ const getBids = async (productId, setBids) => {
         orderBy("bidAmount", "asc"),
         where("productId", "==", productId)
     );
-    
-    onSnapshot(q, async doc => {
 
-        const arr = [];
+    onSnapshot(q, async bidsDoc => {
 
-        const bids = doc.docs.forEach(async element => {
+        const bids = await Promise.all(bidsDoc.docs.map(async element => {
 
             const userInfoDoc = doc(db, "users", element.data().uid);
             const userInfo = await getDoc(userInfoDoc);
 
-            arr.push({
-                uid: userInfo.id,
+            return {
                 ...userInfo.data(),
                 ...element.data()
-            });
+            }
+        }));
 
-        });
-console.log(arr);
-        // setBids(bids);
+        setBids(bids);
     });
 };
 

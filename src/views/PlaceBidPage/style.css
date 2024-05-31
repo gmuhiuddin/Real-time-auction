@@ -74,6 +74,11 @@
     margin-left: 13px;
 }
 
+.place-bid-container > form > button:disabled{
+    background-color: #3ee8b5;
+   cursor: not-allowed;
+}
+
 .place-bid-container > div{
     width: 100%;
     height: 21em;
@@ -81,12 +86,13 @@
     overflow-y: auto;
 }
 
-.place-bid-container > div > div{
-    padding: 3px;
-    margin: 3px auto;
-    border-radius: 12px;
+.place-bid-container > div  table{
+    width: 100%;
+}
+
+.place-bid-container > div  tr{
     text-align: center;
-    background-color: #01d293;
+    width: 100%;
 }
 
 /* @media screen and (width <= 1249px) {

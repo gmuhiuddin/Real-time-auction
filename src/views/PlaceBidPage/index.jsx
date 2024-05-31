@@ -58,7 +58,7 @@ function PlaceBidPage() {
                     <div className="place-bid-container">
                         <form onSubmit={handlePlaceBid}>
                             <input type='number' placeholder='Please enter bid amount' required min={product.price} />
-                            <button disabled={authInfo.uid && bids ? authInfo.uid == bids[bids.length - 1]?.uid : true} type='submit'>Place bid</button>
+                            <button disabled={authInfo.uid && bids ? authInfo.uid == bids[bids.length - 1]?.uid : true} type='submit'>Bid</button>
                         </form>
                         <div>
                             {bids ?
@@ -76,12 +76,12 @@ function PlaceBidPage() {
                                                     <td>{element.username}</td>
                                                     <td>${element.bidAmount}</td>
                                                     <td>
-                                                        {dayjs(element.time.toDate()).format(
+                                                        {dayjs(element.time?.toDate()).format(
                                                             "hh:mm"
                                                         )}
                                                     </td>
                                                     <td>
-                                                        {dayjs(element.time.toDate()).format(
+                                                        {dayjs(element.time?.toDate()).format(
                                                             "DD-MM"
                                                         )}
                                                     </td>

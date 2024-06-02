@@ -26,10 +26,6 @@ function VerifyUser() {
 
         btnRef.current.disabled = false;
 
-        setTimeout(() => {
-            navigate('/seller-dashboard');
-        }, 1500)
-
         } catch (err) {
             setErrMsg(err.message);
         btnRef.current.disabled = false;

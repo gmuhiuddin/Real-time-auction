@@ -38,12 +38,18 @@ function NavbarComponent() {
     };
 
     const handleChangeSwitchSeller = () => {
-        dispatch(setUser({
-            ...user,
-            authType: "seller"
-        }));
+        
+        if(user.verified){
+            navigate('/seller-dashboard');
 
-        navigate('/seller-dashboard');
+            dispatch(setUser({
+                ...user,
+                authType: "seller"
+            }));
+        }else{
+            navigate('/verify-user');
+        };
+
     };
 
     const handleChangeSwitchBuyer = () => {

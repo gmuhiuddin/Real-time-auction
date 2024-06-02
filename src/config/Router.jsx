@@ -96,7 +96,7 @@ function Layout() {
                         uid: userInfo.id,
                         ...userInfo.data(),
                         verified: user.emailVerified,
-                        authType: authInfo.authType
+                        authType: authInfo.authType ? authInfo.authType : "buyer"
                     }));
                 // };
                 setLoader(false);

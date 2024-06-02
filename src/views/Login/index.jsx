@@ -23,7 +23,6 @@ function LoginForm() {
   const handleSignup = async (e) => {
     e.preventDefault();
     setErrMessage("");
-
     signupBtnRef.current.disabled = true;
 
     if (e.target[2].value === e.target[3].value) {

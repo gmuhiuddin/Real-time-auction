@@ -145,12 +145,12 @@ const getUserProducts = async (uid, setProducts) => {
     });
 };
 
-const getProductForEditFromDb = (productId, setProduct) => {
+const getProductForEditFromDb = (uid, productId, setProduct) => {
     const productDoc = doc(db, "products", productId);
     
     onSnapshot(productDoc, doc => {
         
-        if(doc?.data()){
+        if(doc?.data() && doc?.data().uid == uid){
             setProduct({
                 id: doc.id,
                 ...doc.data()

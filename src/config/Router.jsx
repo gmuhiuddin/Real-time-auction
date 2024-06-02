@@ -1,4 +1,4 @@
-import { Outlet, RouterProvider, createBrowserRouter, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, RouterProvider, createBrowserRouter, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, getUserData } from "./firebase";
@@ -130,10 +130,10 @@ function Layout() {
             
              if (authInfo.authType == "seller" && pathname == "/") {
                 navigate('/seller-dashboard');
-                console.log("A");
             };
 
         } else {
+            console.log(pathname);
             if (pathname == "/seller-dashboard" || pathname == "/sell-product" || pathname == "/verify-user") {
                 navigate('/login');
             };

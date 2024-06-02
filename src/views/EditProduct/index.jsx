@@ -19,7 +19,7 @@ function EditProduct() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getProductForEditFromDb(productId, setProduct);
+    getProductForEditFromDb(authInfo.uid, productId, setProduct);
     getBids(productId, setBids);
   }, []);
 

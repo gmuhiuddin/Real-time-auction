@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { BsArrowLeft } from 'react-icons/bs';
 import CustomAlert from '../../components/CutomAlert/index.jsx';
 import { sendVerificationEmail } from '../../config/firebase.jsx';
 import './style.css';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 function VerifyUser() {
 
@@ -33,9 +33,9 @@ function VerifyUser() {
     };
 
     return (
-        <div className='pass-reset-page-main-container'>
+        <div className='send-veri-email-page-main-container'>
             <span onClick={() => navigate('/')}><BsArrowLeft size={29} /></span>
-            <div className="pass-container">
+            <div className="verification-container">
                 <form onSubmit={handlePassReset}>
                     <h1>Send verification email</h1>
                     <br />

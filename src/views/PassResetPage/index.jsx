@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { BsArrowLeft } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 import CustomAlert from '../../components/CutomAlert';
 import { sendResetEmail } from '../../config/firebase.jsx';
 import './style.css';
-import { useNavigate } from 'react-router-dom';
 
 function PassResetPage() {
 

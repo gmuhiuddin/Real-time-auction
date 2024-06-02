@@ -14,11 +14,13 @@ function SellerDashboard() {
   useEffect(() => {
     getUserProducts(authInfo.uid, setProducts);
   }, []);
+
+  if(!products) return <Loader />;
   
   return (
     <div className='dashboard-main-container'>
-    {!products ?
-        <Loader />
+    {!products.length ?
+        <h1 style={{fontSize: "2.5em", fontWeight: "600", color: "white"}}>No product</h1>
       : 
       products.map(element => {
         return (

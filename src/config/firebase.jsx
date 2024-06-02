@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
+import { getDownloadURL, getStorage, uploadBytes, ref } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBMFEBXhwuNu3yhswTfoPqkSz_bKeylZq0",
@@ -15,6 +16,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const signup = async (username, email, password) => {
     const { user: { uid } } = await createUserWithEmailAndPassword(auth, email, password);
@@ -66,15 +68,15 @@ const getProductsFromDb = async (setProducts) => {
 
 const getProductFromDb = (productId, setProduct) => {
     const productDoc = doc(db, "products", productId);
-    
+
     onSnapshot(productDoc, doc => {
-        
-        if(doc?.data()?.activated){
+
+        if (doc?.data()?.activated) {
             setProduct({
                 id: doc.id,
                 ...doc.data()
             });
-        }else{
+        } else {
             setProduct({});
         };
     });
@@ -133,7 +135,7 @@ const getUserProducts = async (uid, setProducts) => {
     );
 
     onSnapshot(q, doc => {
-        
+
         const products = doc.docs.map(element => {
             return {
                 id: element.id,
@@ -147,18 +149,63 @@ const getUserProducts = async (uid, setProducts) => {
 
 const getProductForEditFromDb = (uid, productId, setProduct) => {
     const productDoc = doc(db, "products", productId);
-    
+
     onSnapshot(productDoc, doc => {
-        
-        if(doc?.data() && doc?.data().uid == uid){
+
+        if (doc?.data() && doc?.data().uid == uid) {
             setProduct({
                 id: doc.id,
                 ...doc.data()
             });
-        }else{
+        } else {
             setProduct({});
         };
     });
 };
 
-export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, auth };
+const getProductId = async () => {
+
+    const res = await getDoc(doc(db, 'productId', 'XWoz6GX60rzwW6ZZSfOr'));
+    const productId = res.data().productId;
+
+    return productId;
+};
+
+const addMultiImagesInDatabase = async (image, imageNum) => {
+    const productId = await getProductId();
+
+    let storageRef = ref(storage, `productImages/${productId}/${imageNum}`);
+
+    await uploadBytes(storageRef, image);
+    const url = await getDownloadURL(storageRef);
+    return url;
+};
+
+const addImageInDatabase = async (image) => {
+    const productId = await getProductId();
+
+    let storageRef = ref(storage, `productImage/${productId}/thumbnail`);
+
+    await uploadBytes(storageRef, image);
+    const url = await getDownloadURL(storageRef);
+    return url;
+};
+
+const addProduct = async (productInfo) => {
+    const productId = await getProductId();
+
+    const productCollection = collection(db, "products");
+
+    await addDoc(productCollection, {
+        ...productInfo,
+        productId
+    });
+
+    const productIdDoc = doc(db, "productId", 'XWoz6GX60rzwW6ZZSfOr');
+
+    await updateDoc(productIdDoc, {
+        productId: productId + 1
+    });
+};
+
+export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, addMultiImagesInDatabase, addImageInDatabase, addProduct, auth };

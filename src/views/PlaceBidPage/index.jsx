@@ -24,8 +24,6 @@ function PlaceBidPage() {
         getBids(productId, setBids);
     }, []);
 
-    const images = [""];
-
     const handlePlaceBid = async (e) => {
         e.preventDefault();
         setSuccessMsg();
@@ -51,7 +49,7 @@ function PlaceBidPage() {
             <span onClick={() => navigate('/')} className='back-btn'><BsArrowLeft size={31} /></span>
                 <>
                     <div className="product-detail-container">
-                        <ImageSlider images={images} />
+                        <ImageSlider images={product.images} />
                         <h2>{product.title}</h2>
                         <h3>${product.price}</h3>
                         <span>{product.description}</span>
@@ -59,7 +57,7 @@ function PlaceBidPage() {
                     <div className="place-bid-container">
                         <form onSubmit={handlePlaceBid}>
                             <input type='number' placeholder='Please enter bid amount' required min={product.price} />
-                            <button disabled={authInfo?.uid ? bids && authInfo?.uid == bids[bids.length - 1]?.uid : true} type='submit'>Bid</button>
+                            <button disabled={authInfo?.uid ? bids && authInfo?.uid == bids[0]?.uid : true} type='submit'>Bid</button>
                         </form>
                         <div>
                             {bids ?

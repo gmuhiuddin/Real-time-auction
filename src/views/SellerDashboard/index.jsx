@@ -29,11 +29,11 @@ function SellerDashboard() {
             <span className={`activate-or-not-txt ${element.activated ? "active-txt" : 
               "deactive-txt"
             }`}>{element.activated ? "Activated" : "Deactivated"}</span>
-            <img src="https://media.licdn.com/dms/image/D4D03AQF7_cbK0JjaPA/profile-displayphoto-shrink_800_800/0/1707840065200?e=2147483647&v=beta&t=jrdRdeKilxOBVcRHCldEN6j1v1sOYO64M19UYWGSJ9I" alt="Product-image" />
+            <img src={element.thumbnail} />
             </div>
             <h2>{element.title}</h2>
             <h3>${element.price}</h3>
-            <span>{element.description.substring(0, 73)}{element.description.length >= 73 && "..."}</span>
+            <span>{element.description.substring(0, 71)}{element.description.length >= 71 && "..."}</span>
               <button onClick={() => navigate(`/edit/${element.id}`)}>{element.activated ? "Edit product" : "Re active"}</button>
           </div>
         )

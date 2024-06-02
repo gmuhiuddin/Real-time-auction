@@ -45,7 +45,7 @@ const router = createBrowserRouter([
                         element: <EditProduct />
                     },
                     {
-                        path: "/addproduct",
+                        path: "/add",
                         element: <AddProduct />
                     },
                 ]
@@ -81,6 +81,7 @@ function Layout() {
     const [loader, setLoader] = useState(true);
 
     const authInfo = useSelector(res => res.userInfo.auth);
+    const { productid : productId } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { pathname } = useLocation();
@@ -116,25 +117,29 @@ function Layout() {
                 navigate('/');
             };
 
-            if(authInfo.verified && pathname == "/verify-user"){
-                navigate(-1);
+            if(authInfo.verified){
+                if(pathname == "/verify-user"){
+                    navigate(-1);
+                };
+            }else{
+                if (pathname == "/seller-dashboard" || pathname == "/add" || pathname == `/edit/${productId}` ) {
+                    navigate('/verify-user');
+                };
             };
 
-            if (!authInfo.verified && pathname == "/seller-dashboard" || pathname == "/sell-product" ) {
-                navigate('/verify-user');
-            };
-            
-            if (authInfo.authType !== "seller" && pathname == "/seller-dashboard" || pathname == "/sell-product") {
-                navigate('/');
-            };
-            
-             if (authInfo.authType == "seller" && pathname == "/") {
-                navigate('/seller-dashboard');
+            if (authInfo.authType == "seller") {
+                if(pathname == "/" || pathname == `/detail/${productId}`){
+                    navigate('/seller-dashboard');
+                };
+            }else{
+                if(pathname == "/seller-dashboard" || pathname == `/edit/${productId}` || pathname == '/add'){
+                    navigate('/');
+                };
             };
 
         } else {
-            console.log(pathname);
-            if (pathname == "/seller-dashboard" || pathname == "/sell-product" || pathname == "/verify-user") {
+            
+            if (pathname == "/seller-dashboard" || pathname == "/verify-user" || pathname == "/add") {
                 navigate('/login');
             };
         };

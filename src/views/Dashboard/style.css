@@ -58,7 +58,7 @@
     margin-top: 9px;
 }
 
-@media screen and (width <=219px) {
+@media screen and (width <=384px) {
     .dashboard-main-container {
         padding-top: 93px;
         font-size: 75%;

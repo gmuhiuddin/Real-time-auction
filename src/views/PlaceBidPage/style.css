@@ -204,6 +204,12 @@
     }
 }
 
+@media screen and (max-width: 334px ){
+    .detail-page-main-container{
+        padding-top: 93px;
+    }
+}
+
 @media screen and (width <=361px) {
     .detail-page-main-container {
         font-size: 65%;
@@ -257,7 +263,6 @@
 
 @media screen and (width <=219px) {
     .detail-page-main-container {
-        padding-top: 93px;
         font-size: 59%;
     }
 

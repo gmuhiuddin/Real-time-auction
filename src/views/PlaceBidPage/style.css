@@ -17,7 +17,7 @@
     background-color: #0E1930;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding-bottom: 19px;
 }
 
@@ -25,9 +25,9 @@
     background-color: #fff;
     width: 45em;
     margin-top: 59px;
-    margin-left: 59px;
     border-radius: 9px;
     padding: 11px 5px;
+    margin-right: 19px;
 }
 
 .product-detail-container h2 {
@@ -58,7 +58,7 @@
     width: 31em;
     padding: 9px;
     border-radius: 9px;
-    margin-right: 19px;
+    margin-left: 19px;
 }
 
 .place-bid-container>form>input {

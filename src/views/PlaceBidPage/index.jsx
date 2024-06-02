@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
 import { getBids, getProductFromDb, placeABid } from '../../config/firebase';
+import { useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 import Loader from "../Loader";
 import ImageSlider from '../../components/ImageSlider';
 import CutomAlert from '../../components/CutomAlert';
 import './style.css';
-import { useSelector } from 'react-redux';
-import dayjs from 'dayjs';
 
 function PlaceBidPage() {
 
@@ -18,9 +18,9 @@ function PlaceBidPage() {
     const [successMsg, setSuccessMsg] = useState();
     const authInfo = useSelector(res => res.userInfo.auth);
     const navigate = useNavigate();
-
+    
     useEffect(() => {
-        getProductFromDb(productId, setProduct);
+            getProductFromDb(productId, setProduct);
         getBids(productId, setBids);
     }, []);
 
@@ -42,12 +42,13 @@ function PlaceBidPage() {
         };
     };
 
+    if(!product) return <Loader />;
+    
+    if(!Object.keys(product).length) return navigate('/404');
+
     return (
         <div className='detail-page-main-container'>
             <span onClick={() => navigate('/')} className='back-btn'><BsArrowLeft size={31} /></span>
-            {!product ?
-                <Loader />
-                :
                 <>
                     <div className="product-detail-container">
                         <ImageSlider images={images} />
@@ -62,32 +63,32 @@ function PlaceBidPage() {
                         </form>
                         <div>
                             {bids ?
-                            <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Time</th>
-                                <th>date</th>
-                            </tr>
-                                {bids.map(element => {
-                                    return (
-                                            
-                                                <tr>
-                                                    <td>{element.username}</td>
-                                                    <td>${element.bidAmount}</td>
-                                                    <td>
-                                                        {dayjs(element.time?.toDate()).format(
-                                                            "hh:mm"
-                                                        )}
-                                                    </td>
-                                                    <td>
-                                                        {dayjs(element.time?.toDate()).format(
-                                                            "DD-MM"
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                    )
-                                })}
+                                <table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Time</th>
+                                        <th>date</th>
+                                    </tr>
+                                    {bids.map(element => {
+                                        return (
+
+                                            <tr>
+                                                <td>{element.username}</td>
+                                                <td>${element.bidAmount}</td>
+                                                <td>
+                                                    {dayjs(element.time?.toDate()).format(
+                                                        "hh:mm"
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {dayjs(element.time?.toDate()).format(
+                                                        "DD-MM"
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
                                 </table>
                                 :
                                 <p>no bids yet</p>
@@ -95,11 +96,10 @@ function PlaceBidPage() {
                         </div>
                     </div>
                 </>
-            }
             {errMsg && <CutomAlert isErrMsg={true} txt={errMsg} />}
             {successMsg && <CutomAlert isErrMsg={false} txt={successMsg} />}
         </div>
-    )
-}
+    );
+};
 
 export default PlaceBidPage;

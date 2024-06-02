@@ -11,8 +11,15 @@ import Loader from '../views/Loader';
 import Navbar from '../components/Navbar';
 import PlaceBidPage from '../views/PlaceBidPage';
 import { setUser, removeUser } from '../store/userSlice.jsx';
+import SellerDashboard from "../views/SellerDashboard";
+import AddProduct from "../views/AddProduct";
+import EditProduct from "../views/EditProduct";
 
 const router = createBrowserRouter([
+    {
+        path: "*",
+        element: <h1>404</h1>
+    },
     {
         path: "/",
         element: <Layout />,
@@ -31,7 +38,15 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/seller-dashboard",
-                        element: <Dashboard />
+                        element: <SellerDashboard />
+                    },
+                    {
+                        path: "/edit/:productid",
+                        element: <EditProduct />
+                    },
+                    {
+                        path: "/addproduct",
+                        element: <AddProduct />
                     },
                 ]
             },
@@ -79,9 +94,9 @@ function Layout() {
 
                     dispatch(setUser({
                         uid: userInfo.id,
-                        authType: "buyer",
                         ...userInfo.data(),
-                        verified: user.emailVerified
+                        verified: user.emailVerified,
+                        authType: authInfo.authType
                     }));
                 // };
                 setLoader(false);
@@ -97,16 +112,25 @@ function Layout() {
     
     useEffect(() => {
         if (authInfo?.uid) {
-            if (pathname == "/login" || pathname == "/forgotpasspage" || authInfo.verified && pathname == "/verify-user") {
+            if (pathname == "/login" || pathname == "/forgotpasspage") {
                 navigate('/');
             };
 
-            if (authInfo.verified == false && pathname == "/seller-dashboard" || pathname == "/sell-product" ) {
+            if(authInfo.verified && pathname == "/verify-user"){
+                navigate(-1);
+            };
+
+            if (!authInfo.verified && pathname == "/seller-dashboard" || pathname == "/sell-product" ) {
                 navigate('/verify-user');
             };
             
             if (authInfo.authType !== "seller" && pathname == "/seller-dashboard" || pathname == "/sell-product") {
                 navigate('/');
+            };
+            
+             if (authInfo.authType == "seller" && pathname == "/") {
+                navigate('/seller-dashboard');
+                console.log("A");
             };
 
         } else {

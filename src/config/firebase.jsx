@@ -47,7 +47,12 @@ const sendResetEmail = async (email) => {
 const getProductsFromDb = async (setProducts) => {
     const productsCollection = collection(db, "products");
 
-    onSnapshot(productsCollection, doc => {
+    const q = query(
+        productsCollection,
+        where("activated", "==", true)
+    );
+
+    onSnapshot(q, doc => {
         const products = doc.docs.map(element => {
             return {
                 id: element.id,
@@ -59,14 +64,19 @@ const getProductsFromDb = async (setProducts) => {
     });
 };
 
-const getProductFromDb = async (productId, setProduct) => {
-    const productsCollection = doc(db, "products", productId);
-
-    onSnapshot(productsCollection, doc => {
-        setProduct({
-            id: doc.id,
-            ...doc.data()
-        });
+const getProductFromDb = (productId, setProduct) => {
+    const productDoc = doc(db, "products", productId);
+    
+    onSnapshot(productDoc, doc => {
+        
+        if(doc?.data()?.activated){
+            setProduct({
+                id: doc.id,
+                ...doc.data()
+            });
+        }else{
+            setProduct({});
+        };
     });
 };
 
@@ -114,4 +124,41 @@ const sendVerificationEmail = async () => {
     await sendEmailVerification(auth.currentUser);
 };
 
-export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, auth };
+const getUserProducts = async (uid, setProducts) => {
+    const productsCollection = collection(db, "products");
+
+    const q = query(
+        productsCollection,
+        where("uid", "==", uid)
+    );
+
+    onSnapshot(q, doc => {
+        
+        const products = doc.docs.map(element => {
+            return {
+                id: element.id,
+                ...element.data()
+            }
+        });
+
+        setProducts(products);
+    });
+};
+
+const getProductForEditFromDb = (productId, setProduct) => {
+    const productDoc = doc(db, "products", productId);
+    
+    onSnapshot(productDoc, doc => {
+        
+        if(doc?.data()){
+            setProduct({
+                id: doc.id,
+                ...doc.data()
+            });
+        }else{
+            setProduct({});
+        };
+    });
+};
+
+export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, auth };

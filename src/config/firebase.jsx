@@ -3,15 +3,17 @@ import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPas
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, uploadBytes, ref } from "firebase/storage";
 
+const firebaseConfigKey = import.meta.env.VITE_APP_FIREBASE_APP_CONFIG_KEY;
+
 const firebaseConfig = {
-    apiKey: "AIzaSyBMFEBXhwuNu3yhswTfoPqkSz_bKeylZq0",
+    apiKey: firebaseConfigKey,
     authDomain: "real-time-aution.firebaseapp.com",
     projectId: "real-time-aution",
     storageBucket: "real-time-aution.appspot.com",
     messagingSenderId: "773219752625",
     appId: "1:773219752625:web:a463ba7a29dfc606daa090",
     measurementId: "G-780MSKWHHC"
-};
+}
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -82,12 +84,12 @@ const getProductFromDb = (productId, setProduct) => {
     });
 };
 
-const placeABid = async (bidAmount, productId, uid) => {
+const placeABid = async (bidAmount, productId, uid, bidOwnerId) => {
     const productDoc = doc(db, "products", productId);
     const bidCollection = collection(db, "bids");
 
     await addDoc(bidCollection, {
-        bidAmount, productId, uid,
+        bidAmount, productId, uid, bidOwnerId,
         time: serverTimestamp()
     });
 

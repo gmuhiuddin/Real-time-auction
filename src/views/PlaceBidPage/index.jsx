@@ -30,7 +30,7 @@ function PlaceBidPage() {
         setErrMsg();
 
         try {
-            await placeABid(e.target[0].value, productId, authInfo?.uid);
+            await placeABid(e.target[0].value, productId, authInfo?.uid, product.uid);
 
             setSuccessMsg("Bid placed successfully");
             e.target[0].value = "";

@@ -208,4 +208,21 @@ const addProduct = async (productInfo) => {
     });
 };
 
-export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, addMultiImagesInDatabase, addImageInDatabase, addProduct, auth };
+const updateProduct = async (productInfo, productId) => {
+    const productDoc = doc(db, "products", productId);
+
+    await updateDoc(productDoc, {
+        ...productInfo
+    });
+};
+
+const reactiveProduct = async (productInfo, productId) => {
+    const productDoc = doc(db, "products", productId);
+
+    await updateDoc(productDoc, {
+        ...productInfo,
+        activated: true
+    });
+};
+
+export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, addMultiImagesInDatabase, addImageInDatabase, addProduct, updateProduct, reactiveProduct, auth };

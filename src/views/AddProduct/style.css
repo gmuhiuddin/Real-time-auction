@@ -5,6 +5,21 @@
     overflow-y: scroll;
 }
 
+.sell-main-container>span {
+    border-radius: 50%;
+    height: 49px;
+    width: 49px;
+    position: fixed;
+    top: 9%;
+    left: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: #01d293;
+    cursor: pointer;
+}
+
 .sell-container {
     height: 85vh;
     width: 100%;
@@ -127,6 +142,11 @@
     border: 1px solid #808DAD;
 }
 
+.submit-btn:disabled {
+    cursor: not-allowed;
+    border: 1px solid #b0b9cf;
+}
+
 .important-txt {
     color: rgb(231, 23, 23);
 }
@@ -152,9 +172,9 @@
 
 @media screen and (width <=334px) {
 
-.sell-main-container{
-    font-size: 75%;
-}
+    .sell-main-container {
+        font-size: 75%;
+    }
 
     .sell-main-container {
         padding-top: 93px;

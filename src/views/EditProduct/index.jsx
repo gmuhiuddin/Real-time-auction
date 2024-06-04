@@ -1,97 +1,127 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
-import { getProductForEditFromDb } from '../../config/firebase';
 import { useSelector } from 'react-redux';
-import dayjs from 'dayjs';
-import Loader from "../Loader";
-import ImageSlider from '../../components/ImageSlider';
-import CutomAlert from '../../components/CutomAlert';
+import { getProductForEditFromDb, updateProduct, reactiveProduct, addMultiImagesInDatabase, addImageInDatabase, } from '../../config/firebase';
 import './style.css';
 
 function EditProduct() {
   const { productid: productId } = useParams();
   const [product, setProduct] = useState();
+  const [title, setTitle] = useState();
+  const [price, setPrice] = useState();
+  const [description, setDescription] = useState();
   const [imageLink, setImageLink] = useState();
   const [imagesLinks, setImagesLinks] = useState([]);
   const authInfo = useSelector(res => res.userInfo.auth);
+  const sbtBtn = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setImageLink(product?.thumbnail);
+    setTitle(product?.title);
+    setPrice(product?.price);
+    setDescription(product?.description);
+    setImagesLinks(product?.images || []);
+  }, [product]);
 
   useEffect(() => {
     getProductForEditFromDb(authInfo.uid, productId, setProduct)
   }, []);
-  
-  const handleAddProduct = async (e) => {
+
+  const handleEditProduct = async (e) => {
     e.preventDefault();
-    
-    if (!e.target[3].files[0] || !e.target[4].files[0] || !e.target[5].files[0] || !e.target[6].files[0] || !e.target[7].files[0]) {
+    sbtBtn.current.disabled = true;
+
+    if (imagesLinks.length != 4 || !imageLink || !price || !title || !description) {
       alert('Please enter thumbnail and multiple images');
-  } else {
+      sbtBtn.current.disabled = false;
+    } else {
 
       const date = new Date();
 
       const addInfo = {
-          title: e.target[0].value,
-          description: e.target[1].value,
-          price: e.target[2].value,
-          thumbnail: imageLink,
-          images: imagesLinks,
-          date: date.getTime(),
-          uid: authInfo.uid,
-          activated: true
+        ...product,
+        title: e.target[0].value,
+        description: e.target[1].value,
+        price: e.target[2].value,
+        thumbnail: imageLink,
+        images: imagesLinks,
+        productUpdateTime: date.getTime(),
+        uid: authInfo.uid,
+        activated: true
       };
 
       try {
-          await addProduct(addInfo);
-          e.target[0].value = '';
-          e.target[1].value = '';
-          e.target[2].value = '';
-          setImageLink('');
-          navigate('/seller-dashboard');
+        await updateProduct(addInfo, productId);
+        e.target[0].value = '';
+        e.target[1].value = '';
+        e.target[2].value = '';
+        setImageLink('');
+        navigate('/seller-dashboard');
 
       } catch (e) {
-          console.log(e.message)
+        console.log(e.message)
+        sbtBtn.current.disabled = false;
       };
+    };
   };
+
+  const handleReactiveProduct = async (e) => {
+    e.preventDefault();
+    sbtBtn.current.disabled = true;
+
+    if (imagesLinks.length != 4 || !imageLink || !price || !title || !description) {
+      alert('Please enter thumbnail and multiple images');
+      sbtBtn.current.disabled = false;
+    } else {
+
+      const date = new Date();
+
+      const addInfo = {
+        ...product,
+        title: e.target[0].value,
+        description: e.target[1].value,
+        price: e.target[2].value,
+        thumbnail: imageLink,
+        images: imagesLinks,
+        date: date.getTime(),
+        uid: authInfo.uid,
+      };
+
+      try {
+        await reactiveProduct(addInfo, productId);
+        e.target[0].value = '';
+        e.target[1].value = '';
+        e.target[2].value = '';
+        setImageLink('');
+        navigate('/seller-dashboard');
+
+      } catch (e) {
+        console.log(e.message)
+        sbtBtn.current.disabled = false;
+      };
+    };
   };
 
   return (
     <div className='sell-main-container'>
+      <span onClick={() => navigate('/login')}><BsArrowLeft size={29} /></span>
       <div className="sell-container">
         <br />
         <div className='sell-form-container'>
-          <form onSubmit={handleAddProduct}>
+          <form onSubmit={product?.activated ? handleEditProduct : handleReactiveProduct}>
             <div className='main-container'>
               <div className='inputs-container'>
 
-                {/* <label for="category-option">Category<span className='important-txt'>*</span>:</label>
-
-<select required id='category-option'>
-  <option>Select category</option>
-  <option>Mobiles</option>
-  <option>Vehicles</option>
-  <option>Property For Sale</option>
-  <option>Property For Rent</option>
-  <option>Electronics & Home Appliances</option>
-  <option>Bikes</option>
-  <option>Business Indestrial & Agriculture</option>
-  <option>Services</option>
-  <option>Jobs</option>
-  <option>Animals</option>
-  <option>Furniture & Home Decor</option>
-  <option>Fashion & Beauty</option>
-  <option>Books, Sports & Hobbies</option>
-  <option>Kids</option>
-</select> */}
-
                 <label for="titel-txt">Title<span className='important-txt'>*</span>:</label>
-                <input required id='titel-txt' placeholder='Title' type='text' />
+                <input value={title} onChange={(e) => setTitle(e.target.value)} required id='titel-txt' placeholder='Title' type='text' />
 
                 <label for="description-txt">Description<span className='important-txt'>*</span>:</label>
-                <textarea maxLength={199} required id='description-txt' type='text' />
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={199} required id='description-txt' type='text' />
 
                 <label for="price-txt">Starting price<span className='important-txt'>*</span>:</label>
-                <input required id='price' placeholder='Starting price' type='number' />
+                <input value={price} onChange={(e) => setPrice(e.target.value)} required id='price' placeholder='Starting price' type='number' />
 
               </div>
 
@@ -103,7 +133,7 @@ function EditProduct() {
                 <label className='thumbnail-image-label' for="thumbnail-image">Click here</label>
                 <input onChange={async (e) => {
                   const imageUrl = await addImageInDatabase(e.target.files[0]);
-                  
+
                   setImageLink(imageUrl);
                 }} id='thumbnail-image' type='file' />
               </div>
@@ -193,14 +223,14 @@ function EditProduct() {
 
 
             <br />
-            <button type='submit' className='submit-btn'>Add a product</button>
+            <button ref={sbtBtn} type='submit' className='submit-btn'>{product?.activated ? "Update product" : "Re activate product"}</button>
           </form>
 
         </div>
         <br />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default EditProduct;

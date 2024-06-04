@@ -1,52 +1,58 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { BsArrowLeft } from 'react-icons/bs';
 import { addMultiImagesInDatabase, addImageInDatabase, addProduct } from '../../config/firebase.jsx';
 import './style.css';
-import { useSelector } from 'react-redux';
 
 function AddProduct() {
 
   const [imageLink, setImageLink] = useState();
   const [imagesLinks, setImagesLinks] = useState([]);
   const authInfo = useSelector(res => res.userInfo.auth);
+  const sbtBtn = useRef(null);
   const navigate = useNavigate();
-  
+
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    
+    sbtBtn.current.disabled = true;
+
     if (!e.target[3].files[0] || !e.target[4].files[0] || !e.target[5].files[0] || !e.target[6].files[0] || !e.target[7].files[0]) {
       alert('Please enter thumbnail and multiple images');
-  } else {
+      sbtBtn.current.disabled = false;
+    } else {
 
       const date = new Date();
 
       const addInfo = {
-          title: e.target[0].value,
-          description: e.target[1].value,
-          price: e.target[2].value,
-          thumbnail: imageLink,
-          images: imagesLinks,
-          date: date.getTime(),
-          uid: authInfo.uid,
-          activated: true
+        title: e.target[0].value,
+        description: e.target[1].value,
+        price: e.target[2].value,
+        thumbnail: imageLink,
+        images: imagesLinks,
+        productAddTime: date.getTime(),
+        uid: authInfo.uid,
+        activated: true
       };
 
       try {
-          await addProduct(addInfo);
-          e.target[0].value = '';
-          e.target[1].value = '';
-          e.target[2].value = '';
-          setImageLink('');
-          navigate('/seller-dashboard');
+        await addProduct(addInfo);
+        e.target[0].value = '';
+        e.target[1].value = '';
+        e.target[2].value = '';
+        setImageLink('');
+        navigate('/seller-dashboard');
 
       } catch (e) {
-          console.log(e.message)
+        console.log(e.message)
+        sbtBtn.current.disabled = false;
       };
-  };
+    };
   };
 
   return (
     <div className='sell-main-container'>
+      <span onClick={() => navigate('/login')}><BsArrowLeft size={29} /></span>
       <div className="sell-container">
         <br />
         <div className='sell-form-container'>
@@ -93,7 +99,7 @@ function AddProduct() {
                 <label className='thumbnail-image-label' for="thumbnail-image">Click here</label>
                 <input onChange={async (e) => {
                   const imageUrl = await addImageInDatabase(e.target.files[0]);
-                  
+
                   setImageLink(imageUrl);
                 }} id='thumbnail-image' type='file' />
               </div>
@@ -183,14 +189,14 @@ function AddProduct() {
 
 
             <br />
-            <button type='submit' className='submit-btn'>Add a product</button>
+            <button ref={sbtBtn} type='submit' className='submit-btn'>Add a product</button>
           </form>
 
         </div>
         <br />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default AddProduct;

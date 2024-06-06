@@ -22,19 +22,19 @@ function SellerDashboard() {
     {!products.length ?
         <h1 style={{fontSize: "2.5em", fontWeight: "600", color: "white"}}>No product</h1>
       : 
-      products.map(element => {
+      products.map((element, index) => {
         return (
-          <div className='user-product-card'>
+          <div key={index} className='user-product-card'>
             <div className="img-container">
             <span className={`activate-or-not-txt ${element.activated ? "active-txt" : 
               "deactive-txt"
-            }`}>{element.activated ? "Activated" : "Deactivated"}</span>
+            }`}>{element.startingTime >= new Date().getTime() ? "Pending" : element.activated ? "Activated" : "Deactivated"}</span>
             <img src={element.thumbnail} />
             </div>
             <h2>{element.title}</h2>
             <h3>${element.price}</h3>
-            <span>{element.description.substring(0, 71)}{element.description.length >= 71 && "..."}</span>
-              <button onClick={() => navigate(`/edit/${element.id}`)}>{element.activated ? "Edit product" : "Re active"}</button>
+            <span>{element.description.substring(0, 71)}{element.description.length >= 70 && "..."}</span>
+              <button onClick={(e) => !element.startingTime >= new Date().getTime() ? navigate(`/edit/${element.id}`) : alert("Product status was pending")}>{element.startingTime >= new Date().getTime() ? "Pending" : element.activated ? "Edit" : "Re active"}</button>
           </div>
         )
       })

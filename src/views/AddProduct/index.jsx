@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { BsArrowLeft } from 'react-icons/bs';
@@ -9,30 +9,60 @@ function AddProduct() {
 
   const [imageLink, setImageLink] = useState();
   const [imagesLinks, setImagesLinks] = useState([]);
+  const [minTime, setMinTime] = useState('');
   const authInfo = useSelector(res => res.userInfo.auth);
   const sbtBtn = useRef(null);
   const navigate = useNavigate();
+
+  const getMinTime = () => {
+    const now = new Date();
+
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+
+      hours = hours < 10 ? '0' + hours : hours;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+
+      const currentTime = `${hours}:${minutes}`;
+      setMinTime(currentTime);
+  };
+
+  useEffect(() => {
+    getMinTime();
+
+    const interval = setInterval(() => {
+      getMinTime();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
     sbtBtn.current.disabled = true;
 
-    if (!e.target[3].files[0] || !e.target[4].files[0] || !e.target[5].files[0] || !e.target[6].files[0] || !e.target[7].files[0]) {
+    if (!e.target[4].files[0] || !e.target[5].files[0] || !e.target[6].files[0] || !e.target[7].files[0] || !e.target[8].files[0]) {
       alert('Please enter thumbnail and multiple images');
       sbtBtn.current.disabled = false;
     } else {
 
-      const date = new Date();
+      const startingTime = new Date();
+      startingTime.setHours(e.target[3].value.slice(0, 2));
+      startingTime.setMinutes(e.target[3].value.slice(3));
+      startingTime.setSeconds(0);
+      const expiryTime = new Date(startingTime);
+      expiryTime.setMinutes(startingTime.getMinutes() + 10);
 
       const addInfo = {
         title: e.target[0].value,
         description: e.target[1].value,
         price: e.target[2].value,
+        startingTime: startingTime.getTime(),
+        expiryTime: expiryTime.getTime(),
         thumbnail: imageLink,
         images: imagesLinks,
-        productAddTime: date.getTime(),
         uid: authInfo.uid,
-        activated: true
+        activated: false
       };
 
       try {
@@ -80,22 +110,24 @@ function AddProduct() {
   <option>Kids</option>
 </select> */}
 
-                <label for="titel-txt">Title<span className='important-txt'>*</span>:</label>
+                <label htmlFor="titel-txt">Title<span className='important-txt'>*</span>:</label>
                 <input required id='titel-txt' placeholder='Title' type='text' />
 
-                <label for="description-txt">Description<span className='important-txt'>*</span>:</label>
+                <label htmlFor="description-txt">Description<span className='important-txt'>*</span>:</label>
                 <textarea maxLength={199} required id='description-txt' type='text' />
 
-                <label for="price-txt">Starting price<span className='important-txt'>*</span>:</label>
+                <label htmlFor="price-txt">Starting price<span className='important-txt'>*</span>:</label>
                 <input required id='price' placeholder='Starting price' type='number' />
 
+                <label htmlFor="product-launch-time'">Product launching time<span className='important-txt'>*</span>:</label>
+                <input required id='product-launch-time' placeholder='Product launching time' type='time' min={minTime} />
               </div>
 
               <div className='title-image-container image-container'>
                 <img src={imageLink} alt='Thumbnail image' />
                 <br />
                 <br />
-                <label for="thumbnail-image" style={{ textAlign: 'left' }}>Add thumbnail image<span className='important-txt'>*</span>:</label>
+                <label htmlFor="thumbnail-image" style={{ textAlign: 'left' }}>Add thumbnail image<span className='important-txt'>*</span>:</label>
                 <label className='thumbnail-image-label' for="thumbnail-image">Click here</label>
                 <input onChange={async (e) => {
                   const imageUrl = await addImageInDatabase(e.target.files[0]);
@@ -115,7 +147,7 @@ function AddProduct() {
                 <img src={imagesLinks[0]} alt='First image' />
                 <br />
                 <br />
-                <label for="first-image" style={{ textAlign: 'left' }}>Add first image<span className='important-txt'>*</span>:</label>
+                <label htmlFor="first-image" style={{ textAlign: 'left' }}>Add first image<span className='important-txt'>*</span>:</label>
                 <label className='first-image-label' for="first-image">Click here</label>
                 <input
                   onChange={async (e) => {
@@ -132,7 +164,7 @@ function AddProduct() {
                 <img src={imagesLinks[1]} alt='Second image' />
                 <br />
                 <br />
-                <label for="second-image" style={{ textAlign: 'left' }}>Add second image<span className='important-txt'>*</span>:</label>
+                <label htmlFor="second-image" style={{ textAlign: 'left' }}>Add second image<span className='important-txt'>*</span>:</label>
                 <label className='second-image-label' for="second-image">Click here</label>
                 <input
                   onChange={async (e) => {
@@ -151,7 +183,7 @@ function AddProduct() {
                 <img src={imagesLinks[2]} alt='Third image' />
                 <br />
                 <br />
-                <label for="third-image" style={{ textAlign: 'left' }}>Add third image<span className='important-txt'>*</span>:</label>
+                <label htmlFor="third-image" style={{ textAlign: 'left' }}>Add third image<span className='important-txt'>*</span>:</label>
                 <label className='third-image-label' for="third-image">Click here</label>
                 <input
                   onChange={async (e) => {
@@ -170,7 +202,7 @@ function AddProduct() {
                 <img src={imagesLinks[3]} alt='Fourth image' />
                 <br />
                 <br />
-                <label for="fourth-image" style={{ textAlign: 'left' }}>Add fourth image<span className='important-txt'>*</span>:</label>
+                <label htmlFor="fourth-image" style={{ textAlign: 'left' }}>Add fourth image<span className='important-txt'>*</span>:</label>
                 <label className='fourth-image-label' for="fourth-image">Click here</label>
                 <input
                   onChange={async (e) => {

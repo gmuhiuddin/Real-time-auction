@@ -49,7 +49,7 @@
     padding: .625rem;
     border: none;
     border-radius: .5em;
-    background-color: #0e1930;
+    background-color: #0e1930 !important;
 }
 
 .sell-form-container select {

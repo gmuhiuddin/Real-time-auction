@@ -18,13 +18,13 @@ function Dashboard() {
     {!products ?
         <Loader />
       : 
-      products.map(element => {
+      products.map((element, index) => {
         return (
-          <div className='product-card'>
+          <div key={index} className='product-card'>
             <img src={element.thumbnail} alt="Product-image" />
             <h2>{element.title}</h2>
             <h3>${element.price}</h3>
-            <span>{element.description.substring(0, 71)}{element.description.length >= 71 && "..."}</span>
+            <span>{element.description.substring(0, 71)}{element.description.length >= 70 && "..."}</span>
             <button onClick={() => navigate(`/detail/${element.id}`)}>Place a bid</button>
           </div>
         )

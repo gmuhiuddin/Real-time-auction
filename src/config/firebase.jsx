@@ -198,15 +198,37 @@ const addProduct = async (productInfo) => {
 
     const productCollection = collection(db, "products");
 
-    await addDoc(productCollection, {
+    const product = await addDoc(productCollection, {
         ...productInfo,
         productId
     });
-
+    
     const productIdDoc = doc(db, "productId", 'XWoz6GX60rzwW6ZZSfOr');
 
     await updateDoc(productIdDoc, {
         productId: productId + 1
+    });
+
+    const api = import.meta.env.VITE_APP_BACKEND_API;
+
+    await fetch(`${api}/updateproduct/avtivateproduct`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            productId: product.id, startingTime: productInfo.startingTime
+        })
+    });
+    
+    await fetch(`${api}/updateproduct/deavtivateproduct`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            productId: product.id, expiryTime: productInfo.expiryTime
+        })
     });
 };
 

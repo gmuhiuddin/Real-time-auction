@@ -81,24 +81,24 @@ function Layout() {
     const [loader, setLoader] = useState(true);
 
     const authInfo = useSelector(res => res.userInfo.auth);
-    const { productid : productId } = useParams();
+    const { productid: productId } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { pathname } = useLocation();
-    
+
     useEffect(() => {
         onAuthStateChanged(auth, async user => {
             if (user) {
-                
-                // if (!authInfo?.uid) {
-                    const userInfo = await getUserData(user.uid);
 
-                    dispatch(setUser({
-                        uid: userInfo.id,
-                        ...userInfo.data(),
-                        verified: user.emailVerified,
-                        authType: authInfo.authType ? authInfo.authType : "buyer"
-                    }));
+                // if (!authInfo?.uid) {
+                const userInfo = await getUserData(user.uid);
+
+                dispatch(setUser({
+                    uid: userInfo.id,
+                    ...userInfo.data(),
+                    verified: user.emailVerified,
+                    authType: authInfo.authType ? authInfo.authType : "buyer"
+                }));
                 // };
                 setLoader(false);
 
@@ -110,35 +110,35 @@ function Layout() {
             };
         });
     }, []);
-    
+
     useEffect(() => {
         if (authInfo?.uid) {
             if (pathname == "/login" || pathname == "/forgotpasspage") {
                 navigate('/');
             };
 
-            if(authInfo.verified){
-                if(pathname == "/verify-user"){
+            if (authInfo.verified) {
+                if (pathname == "/verify-user") {
                     navigate(-1);
                 };
-            }else{
-                if (pathname == "/seller-dashboard" || pathname == "/add" || pathname == `/edit/${productId}` ) {
+            } else {
+                if (pathname == "/seller-dashboard" || pathname == "/add" || pathname == `/edit/${productId}`) {
                     navigate('/verify-user');
                 };
             };
 
             if (authInfo.authType == "seller") {
-                if(pathname == "/" || pathname == `/detail/${productId}`){
+                if (pathname == "/" || pathname == `/detail/${productId}`) {
                     navigate('/seller-dashboard');
                 };
-            }else{
-                if(pathname == "/seller-dashboard" || pathname == `/edit/${productId}` || pathname == '/add'){
+            } else {
+                if (pathname == "/seller-dashboard" || pathname == `/edit/${productId}` || pathname == '/add') {
                     navigate('/');
                 };
             };
 
         } else {
-            
+
             if (pathname == "/seller-dashboard" || pathname == "/verify-user" || pathname == "/add") {
                 navigate('/login');
             };

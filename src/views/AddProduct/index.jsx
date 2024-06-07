@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { BsArrowLeft } from 'react-icons/bs';
 import { addMultiImagesInDatabase, addImageInDatabase, addProduct } from '../../config/firebase.jsx';
+import CustomAlert from '../../components/CutomAlert';
 import './style.css';
 
 function AddProduct() {
@@ -10,6 +11,8 @@ function AddProduct() {
   const [imageLink, setImageLink] = useState();
   const [imagesLinks, setImagesLinks] = useState([]);
   const [minTime, setMinTime] = useState('');
+  const [successTxt, setSuccessTxt] = useState();
+  const [errTxt, setErrTxt] = useState();
   const authInfo = useSelector(res => res.userInfo.auth);
   const sbtBtn = useRef(null);
   const navigate = useNavigate();
@@ -39,10 +42,12 @@ function AddProduct() {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
+    setErrTxt();
+    setSuccessTxt();
     sbtBtn.current.disabled = true;
 
     if (!e.target[4].files[0] || !e.target[5].files[0] || !e.target[6].files[0] || !e.target[7].files[0] || !e.target[8].files[0]) {
-      alert('Please enter thumbnail and multiple images');
+      setErrTxt('Please enter thumbnail and multiple images');
       sbtBtn.current.disabled = false;
     } else {
 
@@ -71,10 +76,11 @@ function AddProduct() {
         e.target[1].value = '';
         e.target[2].value = '';
         setImageLink('');
+        setSuccessTxt("Product add successfully");
         navigate('/seller-dashboard');
 
       } catch (e) {
-        console.log(e.message)
+        setErrTxt(e.message)
         sbtBtn.current.disabled = false;
       };
     };
@@ -227,6 +233,8 @@ function AddProduct() {
         </div>
         <br />
       </div>
+      {successTxt && <CustomAlert txt={successTxt} isErrMsg={false} />}
+      {errTxt && <CustomAlert txt={errTxt} isErrMsg={true} />}
     </div>
   );
 };

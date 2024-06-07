@@ -241,11 +241,27 @@ const updateProduct = async (productInfo, productId) => {
 };
 
 const reactiveProduct = async (productInfo, productId) => {
-    const productDoc = doc(db, "products", productId);
 
-    await updateDoc(productDoc, {
-        ...productInfo,
-        activated: true
+    const api = import.meta.env.VITE_APP_BACKEND_API;
+
+    await fetch(`${api}/updateproduct/avtivateproduct`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            productId, startingTime: productInfo.startingTime
+        })
+    });
+    
+    await fetch(`${api}/updateproduct/deavtivateproduct`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            productId, expiryTime: productInfo.expiryTime
+        })
     });
 };
 

@@ -14,8 +14,36 @@ function EditProduct() {
   const [imageLink, setImageLink] = useState();
   const [imagesLinks, setImagesLinks] = useState([]);
   const authInfo = useSelector(res => res.userInfo.auth);
+  const [successTxt, setSuccessTxt] = useState();
+  const [errTxt, setErrTxt] = useState();
+  const [minTime, setMinTime] = useState('');
   const sbtBtn = useRef(null);
   const navigate = useNavigate();
+
+  const getMinTime = () => {
+    const now = new Date();
+
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+
+      hours = hours < 10 ? '0' + hours : hours;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+
+      const currentTime = `${hours}:${minutes}`;
+      setMinTime(currentTime);
+  };
+
+  useEffect(() => {
+    getMinTime();
+
+    getProductForEditFromDb(authInfo.uid, productId, setProduct);
+
+    const interval = setInterval(() => {
+      getMinTime();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     setImageLink(product?.thumbnail);
@@ -25,16 +53,14 @@ function EditProduct() {
     setImagesLinks(product?.images || []);
   }, [product]);
 
-  useEffect(() => {
-    getProductForEditFromDb(authInfo.uid, productId, setProduct)
-  }, []);
-
   const handleEditProduct = async (e) => {
     e.preventDefault();
+    setErrTxt();
+    setSuccessTxt();
     sbtBtn.current.disabled = true;
 
     if (imagesLinks.length != 4 || !imageLink || !price || !title || !description) {
-      alert('Please enter thumbnail and multiple images');
+      setErrTxt('Please enter thumbnail and multiple images');
       sbtBtn.current.disabled = false;
     } else {
 
@@ -58,10 +84,12 @@ function EditProduct() {
         e.target[1].value = '';
         e.target[2].value = '';
         setImageLink('');
-        navigate('/seller-dashboard');
+        navigate('/seller-dashboard');        
+        setSuccessTxt("Changes saved successfully");
+
 
       } catch (e) {
-        console.log(e.message)
+        setErrTxt(e.message)
         sbtBtn.current.disabled = false;
       };
     };
@@ -69,14 +97,21 @@ function EditProduct() {
 
   const handleReactiveProduct = async (e) => {
     e.preventDefault();
+    setErrTxt();
+    setSuccessTxt();
     sbtBtn.current.disabled = true;
 
     if (imagesLinks.length != 4 || !imageLink || !price || !title || !description) {
-      alert('Please enter thumbnail and multiple images');
+      setErrTxt('Please enter thumbnail and multiple images');
       sbtBtn.current.disabled = false;
     } else {
 
-      const date = new Date();
+      const startingTime = new Date();
+      startingTime.setHours(e.target[3].value.slice(0, 2));
+      startingTime.setMinutes(e.target[3].value.slice(3));
+      startingTime.setSeconds(0);
+      const expiryTime = new Date(startingTime);
+      expiryTime.setMinutes(startingTime.getMinutes() + 10);
 
       const addInfo = {
         ...product,
@@ -85,7 +120,8 @@ function EditProduct() {
         price: e.target[2].value,
         thumbnail: imageLink,
         images: imagesLinks,
-        date: date.getTime(),
+        expiryTime,
+        startingTime,
         uid: authInfo.uid,
       };
 
@@ -94,11 +130,12 @@ function EditProduct() {
         e.target[0].value = '';
         e.target[1].value = '';
         e.target[2].value = '';
+        setSuccessTxt("Changes saved successfully");
         setImageLink('');
         navigate('/seller-dashboard');
 
       } catch (e) {
-        console.log(e.message)
+        setErrTxt(e.message)
         sbtBtn.current.disabled = false;
       };
     };
@@ -123,6 +160,12 @@ function EditProduct() {
                 <label for="price-txt">Starting price<span className='important-txt'>*</span>:</label>
                 <input value={price} onChange={(e) => setPrice(e.target.value)} required id='price' placeholder='Starting price' type='number' />
 
+                {!product?.activated &&
+                <>
+                <label htmlFor="product-launch-time'">Product Re activation time<span className='important-txt'>*</span>:</label>
+                <input required id='product-launch-time' placeholder='Product launching time' type='time' min={minTime} />
+                </>
+                }
               </div>
 
               <div className='title-image-container image-container'>

@@ -34,7 +34,7 @@ function SellerDashboard() {
             <h2>{element.title}</h2>
             <h3>${element.price}</h3>
             <span>{element.description.substring(0, 71)}{element.description.length >= 70 && "..."}</span>
-              <button onClick={(e) => !element.startingTime >= new Date().getTime() ? navigate(`/edit/${element.id}`) : alert("Product status was pending")}>{element.startingTime >= new Date().getTime() ? "Pending" : element.activated ? "Edit" : "Re active"}</button>
+              <button onClick={(e) => element.startingTime >= new Date().getTime() ? alert("Product status was pending") : navigate(`/edit/${element.id}`)}>{element.startingTime >= new Date().getTime() ? "Pending" : element.activated ? "Edit" : "Re active"}</button>
           </div>
         )
       })

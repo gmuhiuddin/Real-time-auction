@@ -14,6 +14,8 @@ import { setUser, removeUser } from '../store/userSlice.jsx';
 import SellerDashboard from "../views/SellerDashboard";
 import AddProduct from "../views/AddProduct";
 import EditProduct from "../views/EditProduct";
+import UpCommingBidDashboard from "../views/UpcommingBidDashboard";
+import UpCommingBidDetail from "../views/UpcommingBidDetail";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
                     {
                         path: "/detail/:productid",
                         element: <PlaceBidPage />
+                    },
+                    {
+                        path: "/upcomming",
+                        element: <UpCommingBidDashboard />
+                    },
+                    {
+                        path: "/upcomedetail/:productid",
+                        element: <UpCommingBidDetail />
                     },
                     {
                         path: "/seller-dashboard",
@@ -128,7 +138,7 @@ function Layout() {
             };
 
             if (authInfo.authType == "seller") {
-                if (pathname == "/" || pathname == `/detail/${productId}`) {
+                if (pathname == "/" || pathname == `/detail/${productId}` || pathname == "/upcomming" || pathname == `/upcomedetail/${productId}` ) {
                     navigate('/seller-dashboard');
                 };
             } else {

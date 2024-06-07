@@ -19,10 +19,12 @@ function SellerDashboard() {
   
   return (
     <div className='dashboard-main-container'>
+      <button onClick={() => navigate('/add')} className='product-add-btn'>New</button>
     {!products.length ?
         <h1 style={{fontSize: "2.5em", fontWeight: "600", color: "white"}}>No product</h1>
       : 
-      products.map((element, index) => {
+      <div className='cart-main-container'>
+        {products.map((element, index) => {
         return (
           <div key={index} className='user-product-card'>
             <div className="img-container">
@@ -37,7 +39,8 @@ function SellerDashboard() {
               <button onClick={(e) => element.startingTime >= new Date().getTime() ? alert("Product status was pending") : navigate(`/edit/${element.id}`)}>{element.startingTime >= new Date().getTime() ? "Pending" : element.activated ? "Edit" : "Re active"}</button>
           </div>
         )
-      })
+      })}
+      </div>
       }
     </div>
   );

@@ -1,4 +1,4 @@
-.buyer-dashboard-main-container {
+.upcome-dashboard-main-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -7,6 +7,11 @@
     width: 100%;
     padding-top: 63px;
     font-size: 100%;
+}
+
+.dashboard-main-container > h1{
+    color: white;
+    font-size: 2em;
 }
 
 .product-card {

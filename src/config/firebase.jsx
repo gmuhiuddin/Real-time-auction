@@ -84,6 +84,21 @@ const getProductFromDb = (productId, setProduct) => {
     });
 };
 
+const getUpCommingBid = (setProduct) => {
+    const productCollection = collection(db, "products");
+
+    onSnapshot(productCollection, doc => {
+        const  pdt = [];
+        doc.docs.forEach(element => {
+            if(element.data().startingTime >= new Date().getTime()){
+                pdt.push(element.data());
+            }
+        });
+        
+        setProduct(pdt);
+    });
+};
+
 const placeABid = async (bidAmount, productId, uid, bidOwnerId) => {
     const productDoc = doc(db, "products", productId);
     const bidCollection = collection(db, "bids");
@@ -265,4 +280,4 @@ const reactiveProduct = async (productInfo, productId) => {
     });
 };
 
-export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, addMultiImagesInDatabase, addImageInDatabase, addProduct, updateProduct, reactiveProduct, auth };
+export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, addMultiImagesInDatabase, addImageInDatabase, addProduct, updateProduct, reactiveProduct, getUpCommingBid, auth };

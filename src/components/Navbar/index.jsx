@@ -98,8 +98,7 @@ function NavbarComponent() {
                     <NavbarLink onClick={handleScrollHomePage} className="opt" active>
                         Home
                     </NavbarLink>
-                    <NavbarLink disabled={true} active className="opt disabled-opt">About</NavbarLink>
-                    <NavbarLink disabled={true} className="opt disabled-opt">Services</NavbarLink>
+                    <NavbarLink onClick={() => navigate('upcomming')} active className="opt">Up comming bids</NavbarLink>
                     <NavbarLink disabled={true} active className="opt disabled-opt">Contact</NavbarLink>
                 </NavbarCollapse>
             </Navbar>

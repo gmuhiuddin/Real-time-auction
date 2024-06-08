@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
-import { getBids, getProductFromDb, placeABid } from '../../config/firebase';
+import { getUpComeProduct } from '../../config/firebase';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import Loader from "../Loader";
@@ -13,19 +13,16 @@ function UpCommingBidDetail() {
 
     const { productid: productId } = useParams();
     const [product, setProduct] = useState();
-    const [bids, setBids] = useState();
-    const [errMsg, setErrMsg] = useState();
-    const [successMsg, setSuccessMsg] = useState();
     const authInfo = useSelector(res => res.userInfo.auth);
     const navigate = useNavigate();
     
     useEffect(() => {
-        getProductFromDb(productId, setProduct);
+        getUpComeProduct(productId, setProduct);
     }, []);
 
     if(!product) return <Loader />;
     
-    if(!Object.keys(product).length) return navigate('/404');
+    if(!Object.keys(product).length) return navigate('/');
 
     return (
         <div className='detail-page-main-container'>

@@ -84,6 +84,22 @@ const getProductFromDb = (productId, setProduct) => {
     });
 };
 
+const getUpComeProduct = (productId, setProduct) => {
+    const productDoc = doc(db, "products", productId);
+
+    onSnapshot(productDoc, doc => {
+
+        if (doc?.data()?.startingTime >= new Date().getTime()) {
+            setProduct({
+                id: doc.id,
+                ...doc.data()
+            });
+        } else {
+            setProduct({});
+        };
+    });
+};
+
 const getUpCommingBid = (setProduct) => {
     const productCollection = collection(db, "products");
 
@@ -280,4 +296,4 @@ const reactiveProduct = async (productInfo, productId) => {
     });
 };
 
-export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, addMultiImagesInDatabase, addImageInDatabase, addProduct, updateProduct, reactiveProduct, getUpCommingBid, auth };
+export { getProductsFromDb, sendResetEmail, login, logout, getUserData, signup, getProductFromDb, placeABid, getBids, sendVerificationEmail, getUserProducts, getProductForEditFromDb, addMultiImagesInDatabase, addImageInDatabase, addProduct, updateProduct, reactiveProduct, getUpCommingBid, getUpComeProduct, auth };

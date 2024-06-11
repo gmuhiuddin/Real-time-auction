@@ -15,19 +15,24 @@ function AddProduct() {
   const [errTxt, setErrTxt] = useState();
   const authInfo = useSelector(res => res.userInfo.auth);
   const sbtBtn = useRef(null);
+  const thumbImgInp = useRef(null);
+  const fstImgInp = useRef(null);
+  const ScdImgInp = useRef(null);
+  const trdImgInp = useRef(null);
+  const furImgInp = useRef(null);
   const navigate = useNavigate();
 
   const getMinTime = () => {
     const now = new Date();
 
-      let hours = now.getHours();
-      let minutes = now.getMinutes();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
 
-      hours = hours < 10 ? '0' + hours : hours;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
 
-      const currentTime = `${hours}:${minutes}`;
-      setMinTime(currentTime);
+    const currentTime = `${hours}:${minutes}`;
+    setMinTime(currentTime);
   };
 
   useEffect(() => {
@@ -134,11 +139,19 @@ function AddProduct() {
                 <br />
                 <br />
                 <label htmlFor="thumbnail-image" style={{ textAlign: 'left' }}>Add thumbnail image<span className='important-txt'>*</span>:</label>
-                <label className='thumbnail-image-label' for="thumbnail-image">Click here</label>
-                <input onChange={async (e) => {
-                  const imageUrl = await addImageInDatabase(e.target.files[0]);
+                <label className='thumbnail-image-label' htmlFor="thumbnail-image">Click here</label>
+                <input ref={thumbImgInp} onChange={async (e) => {
+                  thumbImgInp.current.disabled = true;
+                  
+                  if (e.target.files[0]) {
+                    const imageUrl = await addImageInDatabase(e.target.files[0]);
 
-                  setImageLink(imageUrl);
+                    setImageLink(imageUrl);
+
+                    thumbImgInp.current.disabled = false;
+                  } else {
+                    thumbImgInp.current.disabled = false;
+                  };
                 }} id='thumbnail-image' type='file' />
               </div>
             </div>
@@ -154,14 +167,22 @@ function AddProduct() {
                 <br />
                 <br />
                 <label htmlFor="first-image" style={{ textAlign: 'left' }}>Add first image<span className='important-txt'>*</span>:</label>
-                <label className='first-image-label' for="first-image">Click here</label>
+                <label className='first-image-label' htmlFor="first-image">Click here</label>
                 <input
+                  ref={fstImgInp}
                   onChange={async (e) => {
-                    const imageUrl = await addMultiImagesInDatabase(e.target.files[0], 'first');
+                    fstImgInp.current.disabled = true;
+                    if (e.target.files[0]) {
+                      const imageUrl = await addMultiImagesInDatabase(e.target.files[0], 'first');
 
-                    const imagess = [...imagesLinks];
-                    imagess[0] = imageUrl;
-                    setImagesLinks(imagess);
+                      const imagess = [...imagesLinks];
+                      imagess[0] = imageUrl;
+                      setImagesLinks(imagess);
+
+                      fstImgInp.current.disabled = false;
+                    } else {
+                      fstImgInp.current.disabled = false;
+                    };
                   }}
                   id='first-image' type='file' />
               </div>
@@ -171,16 +192,26 @@ function AddProduct() {
                 <br />
                 <br />
                 <label htmlFor="second-image" style={{ textAlign: 'left' }}>Add second image<span className='important-txt'>*</span>:</label>
-                <label className='second-image-label' for="second-image">Click here</label>
+                <label className='second-image-label' htmlFor="second-image">Click here</label>
                 <input
+                  ref={ScdImgInp}
                   onChange={async (e) => {
-                    const imageUrl = await addMultiImagesInDatabase(e.target.files[0], 'second');
+                    ScdImgInp.current.disabled = true;
 
-                    const imagess = [...imagesLinks];
+                    if (e.target.files[0]) {
 
-                    imagess[1] = imageUrl;
+                      const imageUrl = await addMultiImagesInDatabase(e.target.files[0], 'second');
 
-                    setImagesLinks(imagess);
+                      const imagess = [...imagesLinks];
+
+                      imagess[1] = imageUrl;
+
+                      setImagesLinks(imagess);
+
+                      ScdImgInp.current.disabled = false;
+                    } else {
+                      ScdImgInp.current.disabled = false;
+                    };
                   }}
                   id='second-image' type='file' />
               </div>
@@ -190,16 +221,26 @@ function AddProduct() {
                 <br />
                 <br />
                 <label htmlFor="third-image" style={{ textAlign: 'left' }}>Add third image<span className='important-txt'>*</span>:</label>
-                <label className='third-image-label' for="third-image">Click here</label>
+                <label className='third-image-label' htmlFor="third-image">Click here</label>
                 <input
+                  ref={trdImgInp}
                   onChange={async (e) => {
-                    const imageUrl = await addMultiImagesInDatabase(e.target.files[0], 'third');
 
-                    const imagess = [...imagesLinks];
+                    trdImgInp.current.disabled = true;
 
-                    imagess[2] = imageUrl;
+                    if (e.target.files[0]) {
 
-                    setImagesLinks(imagess);
+                      const imageUrl = await addMultiImagesInDatabase(e.target.files[0], 'third');
+
+                      const imagess = [...imagesLinks];
+
+                      imagess[2] = imageUrl;
+
+                      setImagesLinks(imagess);
+                      trdImgInp.current.disabled = false;
+                    } else {
+                      trdImgInp.current.disabled = false;
+                    };
                   }}
                   id='third-image' type='file' />
               </div>
@@ -209,16 +250,26 @@ function AddProduct() {
                 <br />
                 <br />
                 <label htmlFor="fourth-image" style={{ textAlign: 'left' }}>Add fourth image<span className='important-txt'>*</span>:</label>
-                <label className='fourth-image-label' for="fourth-image">Click here</label>
+                <label className="fourth-image-label" htmlFor="fourth-image">Click here</label>
                 <input
+                  ref={furImgInp}
                   onChange={async (e) => {
-                    const imageUrl = await addMultiImagesInDatabase(e.target.files[0], 'fourth');
+                    furImgInp.current.disabled = true;
 
-                    const imagess = [...imagesLinks];
+                    if (e.target.files[0]) {
 
-                    imagess[3] = imageUrl;
+                      const imageUrl = await addMultiImagesInDatabase(e.target.files[0], 'fourth');
 
-                    setImagesLinks(imagess);
+                      const imagess = [...imagesLinks];
+
+                      imagess[3] = imageUrl;
+
+                      setImagesLinks(imagess);
+
+                      furImgInp.current.disabled = false;
+                    } else {
+                      furImgInp.current.disabled = false;
+                    };
                   }}
                   id='fourth-image' type='file' />
               </div>

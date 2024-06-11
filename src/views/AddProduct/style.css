@@ -3,6 +3,7 @@
     padding-top: 63px;
     min-height: 100vh;
     overflow-y: scroll;
+    font-size: 100%;
 }
 
 .sell-main-container>span {
@@ -128,13 +129,14 @@
 .image-container img {
     margin: 9px auto;
     display: block;
-    max-width: 25vw;
+    max-width: 23em;
+    border-radius: 9px;
 }
 
 .submit-btn {
     display: block;
     margin: 0 auto;
-    padding: .5em 1em;
+    padding: .5em;
     font-size: 1.9em;
     cursor: pointer;
     border-radius: 15px;
@@ -170,13 +172,32 @@
 
 }
 
+@media screen and (width <=501px) {
+    .main-container {
+        font-size: 83%;
+    }
+}
+
+@media screen and (width <=371px) {
+    .main-container {
+        font-size: 75%;
+    }
+}
+
 @media screen and (width <=334px) {
 
     .sell-main-container {
-        font-size: 75%;
+        font-size: 69%;
     }
 
     .sell-main-container {
         padding-top: 93px;
+    }
+}
+
+@media screen and (width <=261px) {
+
+    .sell-main-container {
+        font-size: 59%;
     }
 }

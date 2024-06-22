@@ -24,7 +24,7 @@ function Dashboard() {
             <img src={element.thumbnail} alt="Product-image" />
             <h2>{element.title}</h2>
             <h3>${element.price}</h3>
-            <span>{element.description.substring(0, 71)}{element.description.length >= 70 && "..."}</span>
+            <span>{element.description.substring(0, 71)}{element.description.length >= 72 && "..."}</span>
             <button onClick={() => navigate(`/detail/${element.id}`)}>Place a bid</button>
           </div>
         )

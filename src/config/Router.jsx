@@ -100,7 +100,7 @@ function Layout() {
         onAuthStateChanged(auth, async user => {
             if (user) {
 
-                // if (!authInfo?.uid) {
+                if (!authInfo?.uid || user.emailVerified !== authInfo.verified) {
                 const userInfo = await getUserData(user.uid);
 
                 dispatch(setUser({
@@ -109,7 +109,7 @@ function Layout() {
                     verified: user.emailVerified,
                     authType: authInfo.authType ? authInfo.authType : "buyer"
                 }));
-                // };
+                };
                 setLoader(false);
 
             } else {
